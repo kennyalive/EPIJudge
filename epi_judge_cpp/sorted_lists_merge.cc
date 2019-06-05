@@ -2,35 +2,34 @@
 #include "test_framework/generic_test.h"
 shared_ptr<ListNode<int>> MergeTwoSortedLists(shared_ptr<ListNode<int>> L1,
                                               shared_ptr<ListNode<int>> L2) {
-    shared_ptr<ListNode<int>> head, tail;
-    head = (L1 && L2) ? (L1->data < L2->data ? L1 : L2) : (L1 ? L1 : L2);
-    if (head == L1)
+    if (!L1)
+        return L2;
+    if (!L2)
+        return L1;
+
+    shared_ptr<ListNode<int>> head;
+    if (L1->data < L2->data) {
+        head = L1;
         L1 = L1->next;
-    else
+    }
+    else {
+        head = L2;
         L2 = L2->next;
-    tail = head;
-    while (L1 || L2) {
-        if (L1 && L2) {
-            if (L1->data < L2->data) {
-                tail->next = L1;
-                tail = L1;
-                L1 = L1->next;
-            }
-            else {
-                tail->next = L2;
-                tail = L2;
-                L2 = L2->next;
-            }
-        }
-        else if (L1) {
+    }
+    auto tail = head;
+    while (L1 && L2) {
+        if (L1->data < L2->data) {
             tail->next = L1;
-            L1 = nullptr;
+            tail = L1;
+            L1 = L1->next;
         }
         else {
             tail->next = L2;
-            L2 = nullptr;
+            tail = L2;
+            L2 = L2->next;
         }
     }
+    tail->next = L1 ? L1 : L2;
     return head;
 }
 
