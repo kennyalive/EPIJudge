@@ -3,35 +3,25 @@
 
 shared_ptr<ListNode<int>> ReverseSublist(shared_ptr<ListNode<int>> L, int start,
                                          int finish) {
-    if (!L)
-        return L;
+    ListNode<int> head_node_object;
+    auto head_node = std::shared_ptr<ListNode<int>>(&head_node_object,
+        [](ListNode<int>* p) {});
+    head_node->next = L;
 
-    shared_ptr<ListNode<int>> before_start_node;
-    auto start_node = L;
-    for (int i = 1; i < start; i++) {
-        before_start_node = start_node;
-        start_node = start_node->next;
+    auto sublist_head = head_node;
+    for (int i = 1; i < start; i++)
+        sublist_head = sublist_head->next;
+
+    auto sublist_tail = sublist_head->next;
+
+    while (start++ < finish) {
+        auto node_to_move_to_sublist_head = sublist_tail->next;
+        sublist_tail->next = node_to_move_to_sublist_head->next;
+        node_to_move_to_sublist_head->next = sublist_head->next;
+        sublist_head->next = node_to_move_to_sublist_head;
     }
 
-    auto prev_node = start_node;
-    auto current_node = start_node->next;
-
-    for (int i = 0; i < finish - start; i++) {
-        auto next_node = current_node->next;
-        current_node->next = prev_node;
-        prev_node = current_node;
-        current_node = next_node;
-    }
-    auto finish_node = prev_node;
-   
-    start_node->next = current_node;
-    if (before_start_node) {
-        before_start_node->next = finish_node;
-        return L;
-    }
-    else {
-        return finish_node;
-    }
+    return head_node->next;
 }
 
 int main(int argc, char* argv[]) {
