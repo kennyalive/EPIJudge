@@ -6,8 +6,68 @@
 using std::shared_ptr;
 
 shared_ptr<ListNode<int>> HasCycle(const shared_ptr<ListNode<int>>& head) {
-  // TODO - you fill in here.
-  return nullptr;
+    if (!head)
+        return nullptr;
+
+    int step = 1;
+    auto cur = head;
+    int max_size = 0;
+
+    shared_ptr<ListNode<int>> mark;
+    do {
+        mark = cur;
+        for (int i = 0; i < step; i++) {
+            max_size++;
+            cur = cur->next;
+            if (!cur)
+                return nullptr;
+            if (cur == mark)
+                break;
+        }
+        step *= 2;
+    } while (cur != mark);
+
+    // A)
+    auto start = head;
+    int shift = max_size / 2;
+    shared_ptr<ListNode<int>> cycle_start;
+    while (true) {
+        auto middle = start;
+        for (int i = 0; i < shift; i++)
+            middle = middle->next;
+
+        cur = middle;
+        bool found = false;
+        for (int i = 0; i < max_size; i++) {
+            cur = cur->next;
+            if (cur == middle) {
+                found = true;
+                cycle_start = middle;
+                break;
+            }
+        }
+       
+        if (shift == 0)
+            break;
+        shift /= 2;
+        if (!found)
+            start = middle;
+   }
+    return cycle_start;
+
+    /*
+    // B)
+    auto cycle_head = head;
+    while (true) {
+        cur = cycle_head;
+        for (int i = 0; i < max_size; i++) {
+            cur = cur->next;
+            if (cur == cycle_head)
+                return cycle_head;
+        }
+        cycle_head = cycle_head->next;
+    }
+    */
 }
 void HasCycleWrapper(TimedExecutor& executor,
                      const shared_ptr<ListNode<int>>& head, int cycle_idx) {
