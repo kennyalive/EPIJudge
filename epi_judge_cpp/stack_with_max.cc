@@ -7,21 +7,26 @@ using std::length_error;
 class Stack {
  public:
   bool Empty() const {
-    // TODO - you fill in here.
-    return true;
+      return data.empty();
   }
   int Max() const {
-    // TODO - you fill in here.
-    return 0;
+      return max_value;
   }
   int Pop() {
-    // TODO - you fill in here.
-    return 0;
+      int x = data.back();
+      data.pop_back();
+      if (x == max_value)
+          max_value = std::accumulate(data.begin(), data.end(), INT_MIN, [](int a, int b) { return std::max(a, b);});
+      return x;
   }
   void Push(int x) {
-    // TODO - you fill in here.
-    return;
+      if (x > max_value) 
+          max_value = x;
+      data.push_back(x);
   }
+
+  std::vector<int> data;
+  int max_value = INT_MIN;
 };
 struct StackOp {
   std::string op;
