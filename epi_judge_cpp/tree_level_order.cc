@@ -7,8 +7,28 @@ using std::vector;
 
 vector<vector<int>> BinaryTreeDepthOrder(
     const unique_ptr<BinaryTreeNode<int>>& tree) {
-  // TODO - you fill in here.
-  return {};
+
+    if (!tree)
+        return {};
+    vector<const BinaryTreeNode<int>*> nodes[2];
+    int cur = 0;
+    nodes[0].push_back(tree.get());
+
+    std::vector<std::vector<int>> result;
+    while (!nodes[cur].empty()) {
+        std::vector<int> level;
+        nodes[1-cur].resize(0);
+        for (const auto& node : nodes[cur]) {
+            level.push_back(node->data);
+            if (node->left)
+                nodes[1-cur].push_back(node->left.get());
+            if (node->right)
+                nodes[1-cur].push_back(node->right.get());
+        }
+        result.emplace_back(std::move(level));
+        cur = 1-cur;
+    }
+    return result;
 }
 
 int main(int argc, char* argv[]) {
