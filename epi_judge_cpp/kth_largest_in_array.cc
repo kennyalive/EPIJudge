@@ -6,8 +6,9 @@ using std::vector;
 // FindKthLargest(1, A) returns 3, FindKthLargest(2, A) returns 2,
 // FindKthLargest(3, A) returns 1, and FindKthLargest(4, A) returns -1.
 int FindKthLargest(int k, vector<int>* A_ptr) {
-  // TODO - you fill in here.
-  return 0;
+    auto a = *A_ptr;
+    std::partial_sort(a.begin(), a.begin() + k, a.end(), [](int a, int b) { return a > b; });
+    return a[k-1];
 }
 int FindKthLargestWrapper(int k, vector<int>& A) {
   return FindKthLargest(k, &A);
