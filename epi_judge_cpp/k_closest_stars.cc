@@ -19,8 +19,18 @@ struct Star {
 vector<Star> FindClosestKStars(vector<Star>::const_iterator stars_begin,
                                const vector<Star>::const_iterator& stars_end,
                                int k) {
-  // TODO - you fill in here.
-  return {};
+    std::priority_queue<Star> heap;
+    while (stars_begin != stars_end) {
+        heap.push(*stars_begin++);
+        if (heap.size() > k)
+            heap.pop();
+    }
+    std::vector<Star> result;
+    while (!heap.empty()) {
+        result.push_back(heap.top());
+        heap.pop();
+    }
+    return result;
 }
 template <>
 struct SerializationTraits<Star> : UserSerTraits<Star, double, double, double> {
