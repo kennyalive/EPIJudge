@@ -3,21 +3,51 @@
 #include "test_framework/serialization_traits.h"
 #include "test_framework/test_failure.h"
 
+#include <unordered_map>
+
 class LruCache {
  public:
-  LruCache(size_t capacity) {}
+  LruCache(size_t capacity) : capacity((int)capacity) {}
   int Lookup(int isbn) {
-    // TODO - you fill in here.
-    return 0;
+      auto iter = isbn_to_price.find(isbn);
+      if (iter == isbn_to_price.end())
+          return -1;
+
+      if (iter->second != prices.begin())
+        prices.splice(prices.begin(), prices, iter->second);
+
+      return (*prices.begin()).price;
   }
   void Insert(int isbn, int price) {
-    // TODO - you fill in here.
-    return;
+      auto iter = isbn_to_price.find(isbn);
+      if (iter != isbn_to_price.end()) {
+          if (iter->second != prices.begin())
+              prices.splice(prices.begin(), prices, iter->second);
+          return;
+      }
+      if (prices.size() == capacity) {
+          isbn_to_price.erase(prices.back().isbn);
+          prices.erase(--prices.end());
+      }
+      prices.push_front({price, isbn});
+      isbn_to_price.insert(std::make_pair(isbn, prices.begin()));
   }
   bool Erase(int isbn) {
-    // TODO - you fill in here.
-    return true;
+      auto iter = isbn_to_price.find(isbn);
+      if (iter == isbn_to_price.end())
+          return false;
+
+      prices.erase(iter->second);
+      isbn_to_price.erase(isbn);
+      return true;
   }
+    struct List_Item {
+        int price;
+        int isbn;
+    };
+  int capacity;
+  std::unordered_map<int, std::list<List_Item>::iterator> isbn_to_price;
+  std::list<List_Item> prices;
 };
 struct Op {
   std::string code;
