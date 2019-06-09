@@ -3,8 +3,26 @@
 using std::vector;
 
 void MergeTwoSortedArrays(vector<int>& A, int m, const vector<int>& B, int n) {
-  // TODO - you fill in here.
-  return;
+    for (int i = 0; i < m; i++)
+        A[m+n-1-i] = A[m-1-i];
+
+    auto a_iter = A.begin() + n;
+    auto a_end = a_iter + m;
+    auto b_iter = B.begin();
+    auto b_end = B.begin() + n;
+
+    auto a_cur = A.begin();
+
+    while (a_iter != a_end && b_iter != b_end) {
+        if (*a_iter < *b_iter)
+            *a_cur++ = *a_iter++;
+        else
+            *a_cur++ = *b_iter++;
+    }
+    if (a_iter != a_end)
+        std::copy(a_iter, a_end, a_cur);
+    else
+        std::copy(b_iter, b_end, a_cur);
 }
 vector<int> MergeTwoSortedArraysWrapper(vector<int> A, int m,
                                         const vector<int>& B, int n) {
