@@ -4,6 +4,8 @@ using std::vector;
 
 vector<int> IntersectTwoSortedArrays(const vector<int>& A,
                                      const vector<int>& B) {
+    // A)
+    /*
     auto a_iter = A.begin();
     auto b_iter = B.begin();
     std::vector<int> result;
@@ -21,6 +23,21 @@ vector<int> IntersectTwoSortedArrays(const vector<int>& A,
                 ++a_iter;
             while (b_iter != B.end() && *b_iter == value)
                 ++b_iter;
+        }
+    }
+    return result;
+    */
+
+    // B)
+    const auto& a = A.size() <= B.size() ? A : B;
+    const auto& b = A.size() > B.size() ? A : B;
+    auto b_iter = b.begin();
+    std::vector<int> result;
+    for (int i = 0; i < (int)a.size() && b_iter != b.end(); i++) {
+        if (i == 0 || a[i-1] != a[i]) {
+            b_iter = std::lower_bound(b_iter, b.end(), a[i]);
+            if (b_iter != b.end() && *b_iter == a[i])
+                result.push_back(a[i]);
         }
     }
     return result;
