@@ -3,9 +3,19 @@
 #include "test_framework/generic_test.h"
 using std::unique_ptr;
 
+bool check_bst_node(const unique_ptr<BinaryTreeNode<int>>& node, int min, int max) {
+    if (!node)
+        return true;
+
+    if (node->data < min || node->data > max)
+        return false;
+
+    return check_bst_node(node->left, min, node->data) &&
+           check_bst_node(node->right, node->data, max);
+}
+
 bool IsBinaryTreeBST(const unique_ptr<BinaryTreeNode<int>>& tree) {
-  // TODO - you fill in here.
-  return true;
+    return check_bst_node(tree, INT_MIN, INT_MAX);
 }
 
 int main(int argc, char* argv[]) {
