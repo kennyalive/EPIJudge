@@ -9,9 +9,22 @@ using std::array;
 using std::stack;
 using std::vector;
 const int kNumPegs = 3;
+
+void compute_hanoi_recursive(int num_rings, int from, int to, std::vector<vector<int>>& moves) {
+    int third = 3 - from - to;
+    if (num_rings > 1) {
+        compute_hanoi_recursive(num_rings - 1, from, third, moves);
+    }
+    moves.push_back({from, to});
+    if (num_rings > 1) {
+        compute_hanoi_recursive(num_rings - 1, third, to, moves);
+    }
+}
+
 vector<vector<int>> ComputeTowerHanoi(int num_rings) {
-  // TODO - you fill in here.
-  return {};
+    std::vector<std::vector<int>> moves;
+    compute_hanoi_recursive(num_rings, 0, 1, moves);
+    return moves;
 }
 void ComputeTowerHanoiWrapper(TimedExecutor& executor, int num_rings) {
   array<stack<int>, kNumPegs> pegs;
