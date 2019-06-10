@@ -5,9 +5,22 @@
 using std::unique_ptr;
 using std::vector;
 
+int get_n_largest(BstNode<int>* node, int n, std::vector<int>& result) {
+    if (!node || !n)
+        return n;
+
+   n = get_n_largest(node->right.get(), n, result);
+   if (n) {
+       result.push_back(node->data);
+       n--;
+   }
+   return get_n_largest(node->left.get(), n, result);
+}
+
 vector<int> FindKLargestInBST(const unique_ptr<BstNode<int>>& tree, int k) {
-  // TODO - you fill in here.
-  return {};
+    std::vector<int> result;
+    get_n_largest(tree.get(), k, result);
+    return result;
 }
 
 int main(int argc, char* argv[]) {
