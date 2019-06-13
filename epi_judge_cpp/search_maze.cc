@@ -14,11 +14,55 @@ struct Coordinate {
 
   int x, y;
 };
+
+struct Coordinate_Hash {
+    size_t operator()(const Coordinate& c) const {
+        return std::hash<int>()(c.x) ^ std::hash<int>()(c.y);
+    }
+};
+
+bool dfs_search(const vector<vector<Color>>& maze, const Coordinate& pos, const Coordinate& dest,
+   std::unordered_set<Coordinate, Coordinate_Hash>& visited, vector<Coordinate>& path) {
+
+    if (pos.y < 0 || pos.y >= maze[0].size() ||
+        pos.x < 0 || pos.x >= maze.size() ||
+        maze[pos.x][pos.y] == kBlack ||
+        visited.find(pos) != visited.end())
+        return false;
+
+    visited.insert(pos);
+
+   if (pos == dest) {
+        path.push_back(dest);
+        return true;
+    }
+
+   Coordinate next_pos[] = {
+        {pos.x+1, pos.y},
+        {pos.x-1, pos.y},
+        {pos.x, pos.y+1},
+        {pos.x, pos.y-1}
+   };
+
+   for (auto next : next_pos) {
+       if (dfs_search(maze, next, dest, visited, path)) {
+           path.push_back(pos);
+           return true;
+       }
+   }
+    return false;
+}
+
 vector<Coordinate> SearchMaze(vector<vector<Color>> maze, const Coordinate& s,
                               const Coordinate& e) {
-  // TODO - you fill in here.
-  return {};
+    std::vector<Coordinate> path;
+    std::unordered_set<Coordinate, Coordinate_Hash> visited;
+    dfs_search(maze, s, e, visited, path);
+    if (!path.empty())
+        std::reverse(path.begin(), path.end());
+    return path;
 }
+
 template <>
 struct SerializationTraits<Color> : SerializationTraits<int> {
   using serialization_type = Color;
