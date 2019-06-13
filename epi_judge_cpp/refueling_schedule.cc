@@ -9,9 +9,31 @@ const int kMPG = 20;
 // gallons[i] is the amount of gas in city i, and distances[i] is the distance
 // city i to the next city.
 int FindAmpleCity(const vector<int>& gallons, const vector<int>& distances) {
-  // TODO - you fill in here.
-  return 0;
+    std::list<std::pair<int, int>> delta;
+    for (int i = 0; i < (int)gallons.size(); i++)
+        delta.push_back({i, gallons[i]*kMPG - distances[i]});
+
+    auto iter = delta.begin();
+    while ((int)delta.size() != 1) {
+        auto next = iter;
+        next++;
+        if (next == delta.end())
+            next = delta.begin();
+
+        if (iter->second >= 0 || iter->second < 0 && next->second <= 0) {
+            iter->second += next->second;
+            delta.erase(next);
+        }
+        else {
+            ++iter;
+            if (iter == delta.end())
+                iter = delta.begin();
+        }
+    }
+
+    return delta.begin()->first;
 }
+
 void FindAmpleCityWrapper(TimedExecutor& executor, const vector<int>& gallons,
                           const vector<int>& distances) {
   int result = executor.Run([&] { return FindAmpleCity(gallons, distances); });
