@@ -5,9 +5,23 @@
 using std::deque;
 using std::vector;
 
+void do_paint(vector<deque<bool>>& m, int x, int y, bool expected_value) {
+	if (x < 0 || y < 0 || x >= m.size() || y >= m[0].size() ||
+        m[x][y] != expected_value)
+    {
+		return;
+    }
+
+    m[x][y] = !expected_value;
+
+	do_paint(m, x-1, y, expected_value);
+	do_paint(m, x+1, y, expected_value);
+	do_paint(m, x, y-1, expected_value);
+	do_paint(m, x, y+1,expected_value);
+}
+
 void FlipColor(int x, int y, vector<deque<bool>>* image_ptr) {
-  // TODO - you fill in here.
-  return;
+    do_paint(*image_ptr, x, y, (*image_ptr)[x][y]);
 }
 vector<vector<int>> FlipColorWrapper(TimedExecutor& executor, int x, int y,
                                      vector<vector<int>> image) {
