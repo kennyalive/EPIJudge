@@ -2,6 +2,7 @@
 #include "test_framework/generic_test.h"
 using std::vector;
 
+// A).
 vector<vector<int>> generate_permutation(const vector<int>& a) {
 	vector<vector<int>> result;
 	for (int i = 0; i < (int)a.size(); i++) {
@@ -23,8 +24,26 @@ vector<vector<int>> generate_permutation(const vector<int>& a) {
 	return result;
 }
 
+void generate_permutations2(int k, vector<int>& a, vector<vector<int>>& result) {
+    if (k == (int)a.size()-1) {
+        result.push_back(a);
+        return;
+    }
+    for (int i = k; i < (int)a.size(); i++) {
+        std::swap(a[k], a[i]);
+        generate_permutations2(k+1, a, result);
+        std::swap(a[k], a[i]);
+    }
+}
+
 vector<vector<int>> Permutations(vector<int> A) {
-    return generate_permutation(A);
+   // A).
+   //return generate_permutation(A);
+
+    // B).
+    vector<vector<int>> result;
+    generate_permutations2(0, A, result);
+    return result;
 }
 
 int main(int argc, char* argv[]) {
