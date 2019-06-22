@@ -6,9 +6,27 @@ using std::vector;
 struct Event {
   int start, finish;
 };
+
+// A
+int compute_max_event_concurency(const vector<Event>& events) {
+	int latest = -1;
+	for (const auto& e : events)
+		if (e.finish > latest)
+			latest = e.finish;
+
+	vector<int> timeline(latest + 1, 0);
+	for (const auto& e : events) {
+		for (int k = e.start; k <= e.finish; k++)
+			timeline[k]++;
+    }
+    return *std::max_element(timeline.begin(), timeline.end());
+}
+
+
 int FindMaxSimultaneousEvents(const vector<Event>& A) {
-  // TODO - you fill in here.
-  return 0;
+    // A)
+    return compute_max_event_concurency(A);
+  
 }
 template <>
 struct SerializationTraits<Event> : UserSerTraits<Event, int, int> {};
