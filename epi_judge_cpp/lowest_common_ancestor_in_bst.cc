@@ -6,13 +6,27 @@
 #include "test_framework/timed_executor.h"
 using std::unique_ptr;
 
+BstNode<int>* get_LCA(BstNode<int>* root, BstNode<int>* a, BstNode<int>* b) {
+	while (true) {
+		if (root == a || root == b ||
+            (a->data < root->data && b->data > root->data) ||
+            (a->data> root->data && b->data < root->data))
+			return root;
+		
+		if (a->data < root->data)
+			root = root->left.get();
+		else
+			root = root->right.get();
+	}
+}
+
+
 // Input nodes are nonempty and the key at s is less than or equal to that at
 // b.
 BstNode<int>* FindLCA(const unique_ptr<BstNode<int>>& tree,
                       const unique_ptr<BstNode<int>>& s,
                       const unique_ptr<BstNode<int>>& b) {
-  // TODO - you fill in here.
-  return nullptr;
+    return get_LCA(tree.get(), s.get(), b.get());
 }
 int LcaWrapper(TimedExecutor& executor,
                const std::unique_ptr<BstNode<int>>& tree, int key0, int key1) {
