@@ -1,20 +1,46 @@
 #include "test_framework/generic_test.h"
 #include "test_framework/serialization_traits.h"
 #include "test_framework/test_failure.h"
+#include <vector>
+using std::vector;
+
 class Queue {
  public:
-  Queue(size_t capacity) {}
+     vector<int> values;
+     int head = 0;
+     int tail = 0;
+     int size = 0;
+
+  Queue(size_t capacity) : values(capacity + 1) {}
+
   void Enqueue(int x) {
-    // TODO - you fill in here.
-    return;
+      if (size == (int)values.size()-1) {
+          vector<int> values2((int)values.size()*2 + 1);
+          int i = 0;
+          while (head != tail) {
+              values2[i++] = values[head++];
+              if (head == (int)values.size())
+                  head = 0;
+          }
+          values.swap(values2);
+          head = 0;
+          tail = size;
+      }
+      values[tail++] = x;
+      if (tail == (int)values.size())
+          tail = 0;
+      size++;
   }
   int Dequeue() {
-    // TODO - you fill in here.
-    return 0;
+      int value = values[head];
+      head++;
+      if (head == values.size())
+          head = 0;
+      size--;
+      return value;
   }
   int Size() const {
-    // TODO - you fill in here.
-    return 0;
+      return size;
   }
 };
 struct QueueOp {
