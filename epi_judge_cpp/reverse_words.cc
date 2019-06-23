@@ -4,8 +4,21 @@
 using std::string;
 
 void ReverseWords(string* s) {
-  // TODO - you fill in here.
-  return;
+    string& w = *s;
+    
+    int start = -1;
+    for (int i = 0; i < (int)w.length(); i++) {
+        if (isspace(w[i]) && start != -1) {
+            std::reverse(w.begin() + start, w.begin()+i);
+            start = -1;
+        }
+        else if (!isspace(w[i]) && start == -1) {
+            start = i;
+        }
+    }
+    if (start != -1)
+        std::reverse(w.begin()+start, w.end());
+    std::reverse(w.begin(), w.end());
 }
 string ReverseWordsWrapper(TimedExecutor& executor, string s) {
   string s_copy = s;
