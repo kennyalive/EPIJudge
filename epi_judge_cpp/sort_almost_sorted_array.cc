@@ -10,7 +10,7 @@ vector<int> sort_almost_sorted_array(
 	std::priority_queue<int, vector<int>, std::greater<int>> heap;
     vector<int> output;
 	int n = 0;
-	while (stream_begin != stream_end && n++ < 2*k+1) {
+	while (stream_begin != stream_end && n++ < k) {
 		heap.push(*stream_begin++);
     }
 
