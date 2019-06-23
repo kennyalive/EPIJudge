@@ -4,11 +4,30 @@
 #include "test_framework/test_failure.h"
 #include "test_framework/timed_executor.h"
 using std::shared_ptr;
+using std::vector;
 
 shared_ptr<ListNode<int>> OverlappingNoCycleLists(
     shared_ptr<ListNode<int>> l0, shared_ptr<ListNode<int>> l1) {
-  // TODO - you fill in here.
-  return nullptr;
+    vector<shared_ptr<ListNode<int>>> v0;
+    while (l0) {
+        v0.push_back(l0);
+        l0 = l0->next;
+    }
+    vector<shared_ptr<ListNode<int>>> v1;
+    while (l1) {
+        v1.push_back(l1);
+        l1 = l1->next;
+    }
+    int k0 = (int)v0.size()-1;
+    int k1 = (int)v1.size()-1;
+    shared_ptr<ListNode<int>> node;
+    while (k0 >= 0 && k1 >= 0) {
+        if (v0[k0] == v1[k1])
+            node = v0[k0];
+        k0--;
+        k1--;
+    }
+    return node;
 }
 void OverlappingNoCycleListsWrapper(TimedExecutor& executor,
                                     shared_ptr<ListNode<int>> l0,
