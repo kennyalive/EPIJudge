@@ -3,8 +3,27 @@
 using std::string;
 
 bool IsPalindrome(const string& s) {
-  // TODO - you fill in here.
-  return true;
+    if (s.empty())
+        return true;
+
+    int left = 0;
+    while (left < s.length() && !isalnum(s[left]))
+        left++;
+    int right = (int)s.length()-1;
+    while (right >= 0 && !isalnum(s[right]))
+        right--;
+
+    while (left < right) {
+        if (tolower(s[left]) != tolower(s[right]))
+            return false;
+        left++;
+        while (left < s.length() && !isalnum(s[left]))
+            left++;
+        right--;
+        while (right >= 0 && !isalnum(s[right]))
+            right--;
+    }
+    return true;
 }
 
 int main(int argc, char* argv[]) {
