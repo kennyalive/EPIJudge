@@ -7,8 +7,17 @@ struct Rect {
 };
 
 Rect IntersectRectangle(const Rect& R1, const Rect& R2) {
-  // TODO - you fill in here.
-  return {0, 0, 0, 0};
+    auto r = Rect {
+        std::max(R1.x, R2.x),
+        std::max(R1.y, R2.y),
+        std::min(R1.x + R1.width, R2.x + R2.width),
+        std::min(R1.y + R1.height, R2.y + R2.height)
+    };
+    if (r.x > r.width || r.y > r.height)
+        return Rect{0, 0, -1, -1};
+    r.width -= r.x;
+    r.height -= r.y;
+    return r;
 }
 bool operator==(const Rect& r1, const Rect& r2) {
   return std::tie(r1.x, r1.y, r1.width, r1.height) ==
